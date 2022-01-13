@@ -1,0 +1,25 @@
+---
+- name: keycloak systemd setup
+  template:
+    owner: root
+    group: root
+    mode: 0644
+    src: keycloak.service.j2
+    dest: /etc/systemd/system/keycloak.service
+  notify: restart keycloak
+
+- name: just force systemd to reread configs
+  systemd:
+    daemon_reload: yes
+
+- name: enable keycloak
+  systemd:
+    name: keycloak
+    enabled: yes
+  when: not ansible_check_mode
+
+- name: start keycloak
+  systemd:
+    name: keycloak
+    state: started
+  when: not ansible_check_mode
