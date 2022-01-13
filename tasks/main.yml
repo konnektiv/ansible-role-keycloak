@@ -41,6 +41,7 @@
       src: "{{ keycloak_dir }}/{{ keycloak_archive }}"
       dest: "{{ keycloak_dir }}"
       copy: no
+    when: not ansible_check_mode
 
   - name: keycloak log directory
     file:
