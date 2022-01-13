@@ -1,0 +1,35 @@
+---
+- name: modify standalone.xml
+  xml:
+    path: "{{ keycloak_jboss_home }}/standalone/configuration/standalone.xml"
+    xpath: /srv:server/srv:profile/sub:subsystem/sub:server/sub:http-listener
+    attribute: redirect-socket
+    value: "proxy-https"
+    namespaces:
+      srv: urn:jboss:domain:{{keycloak_jboss_domain_version}}
+      sub: urn:jboss:domain:undertow:12.0
+  notify: restart keycloak
+
+- name: modify standalone.xml
+  xml:
+    path: "{{ keycloak_jboss_home }}/standalone/configuration/standalone.xml"
+    xpath: /srv:server/srv:profile/sub:subsystem/sub:server/sub:http-listener
+    attribute: proxy-address-forwarding
+    value: "true"
+    namespaces:
+      srv: urn:jboss:domain:{{keycloak_jboss_domain_version}}
+      sub: urn:jboss:domain:undertow:12.0
+  notify: restart keycloak
+
+- name: modify standalone.xml
+  xml:
+    path: "{{ keycloak_jboss_home }}/standalone/configuration/standalone.xml"
+    xpath: /srv:server/srv:socket-binding-group
+    add_children:
+      - socket-binding:
+          name: "proxy-https"
+          port: "443"
+    namespaces:
+      srv: urn:jboss:domain:{{keycloak_jboss_domain_version}}
+      sub: urn:jboss:domain:undertow:12.0
+  notify: restart keycloak

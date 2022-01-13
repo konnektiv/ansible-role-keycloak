@@ -30,6 +30,7 @@ The default set of variables defines the settings, keycloak will be installed wi
     keycloak_bind_address: "0.0.0.0"
     keycloak_admin_username: "admin"
     keycloak_admin_password: "admin"
+    keycloak_rproxy: False
     keycloak_create_admin: True
     keycloak_mysql: False
     keycloak_mysql_connector_version: 8.0.17

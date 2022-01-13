@@ -82,6 +82,10 @@
 
   - include: systemd.yml
 
+  - name: configure reverse proxy usage
+    include: rproxy.yml
+    when: keycloak_rproxy
+
   - name: create admin user
     include: admin.yml
     when: keycloak_create_admin
@@ -95,5 +99,9 @@
 
 - include: systemd.yml
   when: _done_file.stat.exists
+
+- name: configure reverse proxy usage
+  include: rproxy.yml
+  when: keycloak_rproxy and _done_file.stat.exists
 
 ...
