@@ -21,6 +21,17 @@
       sub: urn:jboss:domain:undertow:12.0
   notify: restart keycloak
 
+
+- name: Check for existence of socket-binding element
+  community.general.xml:
+    path: "{{ keycloak_jboss_home }}/standalone/configuration/standalone.xml"
+    xpath: /srv:server/srv:socket-binding-group/srv:socket-binding[@name="proxy-https"]
+    count: yes
+    namespaces:
+      srv: urn:jboss:domain:{{keycloak_jboss_domain_version}}
+      sub: urn:jboss:domain:undertow:12.0
+  register: hits
+
 - name: modify standalone.xml
   xml:
     path: "{{ keycloak_jboss_home }}/standalone/configuration/standalone.xml"
@@ -32,4 +43,5 @@
     namespaces:
       srv: urn:jboss:domain:{{keycloak_jboss_domain_version}}
       sub: urn:jboss:domain:undertow:12.0
+  when: not hits.count
   notify: restart keycloak
